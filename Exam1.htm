@@ -23,11 +23,6 @@
 
             $('#check').click(function() {
                 var result = verifyAnswer();
-                if (result) {
-                    results.correctAnswers++;
-                } else {
-                    results.incorrectAnswers++;
-                }
 
                 updateResults(result);
                 setup();
@@ -57,14 +52,20 @@
             if (result.isCorrect) {
                 $li.addClass('list-group-item-success');
                 message = result.fullEnteredEquation;
+                results.correctAnswers++;
             } else {
                 $li.addClass('list-group-item-danger');
                 message = result.fullEnteredEquation + ". Correct answer is: " + result.correctAnswer;
+                results.incorrectAnswers++;
             }
 
             $li.html(message);
 
             $("#result-ul").prepend($li);
+
+            $("#test-total").html(results.correctAnswers + results.incorrectAnswers);
+            $("#test-passed").html(results.correctAnswers);
+            $("#test-failed").html(results.incorrectAnswers);
         }
 
         function verifyAnswer() {
@@ -127,10 +128,11 @@
         <h1>Exam1 - Addition and Subtraction</h1>
         <p>In this test, you will challenge adding and subracting numbers between 0 and 120</p>
 
-        <span id='test-total'></span>
-        <span id='test-passed'></span>
-        <span id='test-failed'></span>
-
+        <h3>
+            <span id='test-total' class="label label-default"></span>
+            <span id='test-passed' class="label label-success"></span>
+            <span id='test-failed' class="label label-danger"></span>
+        </h3>
         <h1>
             <div class='form-inline'>
                 <span id='operand1'>47</span>
