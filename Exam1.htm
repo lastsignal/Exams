@@ -26,6 +26,7 @@
 
                 updateResults(result);
                 setup();
+                updateButtonStatus();
             });
 
             $('input').keypress(function(e) {
@@ -114,6 +115,7 @@
             $('#operand2').html(operand2);
             $('#operator').html(operator);
             $('#answer').val('');
+            $('#answer').focus();
         }
 
         function randomGenerator() {
