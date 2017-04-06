@@ -1,0 +1,165 @@
+<!Doctype>
+<html>
+
+<head>
+    <title>Exam Template</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="equation.js"></script>
+
+    <style type='text/css'>
+
+    </style>
+    <script type='text/javascript'>
+        var results = {
+            correctAnswers: 0,
+            incorrectAnswers: 0
+        };
+
+        $(document).ready(function() {
+
+            $('#check').click(function() {
+
+                let equation = new Equation({
+                    operand1: $('#operand1').html(),
+                    operator: $('#operator').html(),
+                    operand2: $('#operand2').html(),
+                    answer: $('#answer').val()
+                });
+
+                // console.log(equation);
+                // var result = verifyAnswer();
+
+                updateResults(equation);
+                setup();
+                updateButtonStatus();
+            });
+
+            $('input').keypress(function(e) {
+                if (e.keyCode == 13)
+                    $('#check').click();
+            });
+
+            $('input').keyup(function(e) {
+                updateButtonStatus();
+            });
+
+            setup();
+        });
+
+        function updateButtonStatus() {
+            $('#check').prop("disabled", $('#answer').val() === "");
+        }
+
+        function updateResults(equation) {
+            let message = '';
+
+            $li = $("<li class=list-group-item>");
+
+            if (equation.isCorrect) {
+                $li.addClass('list-group-item-success');
+                message = equation.fullEnteredEquation;
+                results.correctAnswers++;
+            } else {
+                $li.addClass('list-group-item-danger');
+                message = equation.fullEnteredEquation + ". Correct answer is: " + equation.fullCorrectEquation;
+                results.incorrectAnswers++;
+            }
+
+            $li.html(message);
+
+            $("#result-ul").prepend($li);
+
+            $("#test-total").html(results.correctAnswers + results.incorrectAnswers);
+            $("#test-passed").html(results.correctAnswers);
+            $("#test-failed").html(results.incorrectAnswers);
+        }
+
+        function verifyAnswer() {
+            let operand1Text = $('#operand1').html();
+            let operand2Text = $('#operand2').html();
+            let answerText = $('#answer').val();
+            let operatorText = $('#operator').html();
+
+            let result = {
+                operand1: Number(operand1Text),
+                operand2: Number(operand2Text),
+                operator: operatorText,
+                answerEntered: Number(answerText),
+            };
+
+            result.correctAnswer = getAnswer(result.operand1, result.operand2, result.operator);
+            result.isCorrect = result.answerEntered === result.correctAnswer;
+            result.fullEnteredEquation = `${operand1Text} ${operatorText} ${operand2Text} = ${answerText}`
+            result.fullCorrectEquation = `${operand1Text} ${operatorText} ${operand2Text} = ${result.correctAnswer}`
+
+            return result;
+
+            function getAnswer(operand1, operand2, operator) {
+                switch (operator) {
+                    case "+":
+                        return operand1 + operand2;
+
+                    case "-":
+                        return operand1 - operand2;
+                }
+            }
+        }
+
+        function setup() {
+            let operand1 = randomGenerator();
+            let operand2 = randomGenerator();
+
+            let operator = Math.random() > 0.5 ? "-" : "+";
+
+            if (operator == "-" && operand1 < operand2) {
+                // swap operands
+                operand1 = [operand2, operand2 = operand1][0];
+            }
+
+            $('#operand1').html(operand1);
+            $('#operand2').html(operand2);
+            $('#operator').html(operator);
+            $('#answer').val('');
+            $('#answer').focus();
+        }
+
+        function randomGenerator() {
+            return Math.floor(Math.random() * 120);
+        }
+    </script>
+
+</head>
+
+<body>
+    <div class="container">
+        <h1>Exam Template</h1>
+        <p>description</p>
+
+        <h3>
+            <span id='test-total' class="label label-default"></span>
+            <span id='test-passed' class="label label-success"></span>
+            <span id='test-failed' class="label label-danger"></span>
+        </h3>
+        <h1>
+            <div class='form-inline'>
+                <span id='operand1'>47</span>
+                <span id='operator'>+</span>
+                <span id='operand2'>11</span>
+                <span id='equals'>=</span>
+                <input id='answer' type="number" class="form-control" />
+                <button id="check" class="btn btn-default">Check</button>
+            </div>
+        </h1>
+
+        <ul id="result-ul" class="list-group"></ul>
+
+    </div>
+
+</body>
+
+</html>
