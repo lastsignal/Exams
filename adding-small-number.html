@@ -1,0 +1,68 @@
+<!Doctype>
+<html>
+
+<head>
+    <title>Practice-1</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="equation.js"></script>
+    <script src="equationFactory.js"></script>
+    <script src="counters.js"></script>
+    <script src="core1.js"></script>
+
+    <style type='text/css'>
+
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <h1>Adding Small Numbers</h1>
+        <p>Adding numbers between 1 and 10</p>
+
+        <h3 class='pull-right'>
+            <span id='test-total' class="label label-default"></span>
+            <span id='test-passed' class="label label-success"></span>
+            <span id='test-failed' class="label label-danger"></span>
+        </h3>
+        <h1>
+            <div class='form-inline'>
+                <span id='operand1'></span>
+                <span id='operator'>+</span>
+                <span id='operand2'></span>
+                <span id='equals'>=</span>
+                <input id='answer' type="number" class="form-control input-lg" />
+                <button id="check" class="btn btn-default">Check</button>
+            </div>
+        </h1>
+
+        <ul id="result-ul" class="list-group"></ul>
+
+    </div>
+
+</body>
+
+</html>
+
+<script>
+    function configure() {
+
+
+        return new EquationFactory({
+            operand1Maker: function() {
+                return Math.floor(Math.random() * 10);
+            },
+            operand2Maker: function() {
+                return Math.floor(Math.random() * 10);
+            },
+            operatorMaker: function() {
+                return "+";
+            }
+        });
+    }
+</script>
